@@ -14,10 +14,7 @@ const csvWriter = createCsvWriter({
 
 // just wrap your code in an async function that gets called immediately
 (async function main() {
-    await doc.useServiceAccountAuth({
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY,
-    });
+    await doc.useServiceAccountAuth(require('./misc/key.json'));
 
     await doc.loadInfo(); // loads document properties and worksheets
     console.log(doc.title);

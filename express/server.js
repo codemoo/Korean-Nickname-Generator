@@ -90,11 +90,7 @@ setInterval(function() {
 
     // just wrap your code in an async function that gets called immediately
     (async function main() {
-        // await doc.useServiceAccountAuth({
-        //     client_email: `${process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL}`,
-        //     private_key: `${process.env.GOOGLE_PRIVATE_KEY}`,
-        // });
-        doc.useApiKey('AIzaSyA6ETOihCt8kdduul0x4r1SkXfrbq94Ydc');
+        await doc.useServiceAccountAuth(require('./misc/key.json'));
         await doc.loadInfo(); // loads document properties and worksheets
         // console.log(doc.title);
     
@@ -120,11 +116,7 @@ setInterval(function() {
 }, the_interval);
 
 (async function main() {
-    // await doc.useServiceAccountAuth({
-    //     client_email: `${process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL}`,
-    //     private_key: `${process.env.GOOGLE_PRIVATE_KEY}`,
-    // }); 
-    doc.useApiKey('AIzaSyA6ETOihCt8kdduul0x4r1SkXfrbq94Ydc');
+    await doc.useServiceAccountAuth(require('./misc/key.json'));
     await doc.loadInfo(); // loads document properties and worksheets
     // console.log(doc.title);
 
