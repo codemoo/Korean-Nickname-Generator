@@ -90,7 +90,7 @@ setInterval(function() {
 
     // just wrap your code in an async function that gets called immediately
     (async function main() {
-        await doc.useServiceAccountAuth(require('./misc/key.json'));
+        await doc.useServiceAccountAuth(require('../misc/key.json'));
         await doc.loadInfo(); // loads document properties and worksheets
         // console.log(doc.title);
     
@@ -116,7 +116,7 @@ setInterval(function() {
 }, the_interval);
 
 (async function main() {
-    await doc.useServiceAccountAuth(require('./misc/key.json'));
+    await doc.useServiceAccountAuth(require('../misc/key.json'));
     await doc.loadInfo(); // loads document properties and worksheets
     // console.log(doc.title);
 
