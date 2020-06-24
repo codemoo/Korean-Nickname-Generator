@@ -1,7 +1,10 @@
-const express = require('express')
-const app = express()
-const port = 3000
+'use strict';
+const express = require('express');
+const serverless = require('serverless-http');
+const app = express();
+const bodyParser = require('body-parser');
 
+const router = express.Router();
 app.get('/', (request, response) => {
     // console.log(words)
     if (request.query.count === undefined || request.query.count === '') {
@@ -34,6 +37,14 @@ app.get('/', (request, response) => {
     }
     
 })
+
+app.use(bodyParser.json());
+app.use('/.netlify/functions/server', router);  // path must route to lambda
+
+module.exports = app;
+module.exports.handler = serverless(app);
+
+
 
 // 닉네임 생성 관련
 const csv = require('csv-parser');
