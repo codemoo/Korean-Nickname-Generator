@@ -44,8 +44,6 @@ app.use('/.netlify/functions/server', router);  // path must route to lambda
 module.exports = app;
 module.exports.handler = serverless(app);
 
-
-
 // 닉네임 생성 관련
 const csv = require('csv-parser');
 const fs = require('fs');
@@ -63,13 +61,7 @@ fs.createReadStream('./misc/words.csv')
 .on('end', () => {
     console.log('CSV file successfully processed');
 
-    app.listen(port, (err) => {
-        if (err) {
-            return console.log('something bad happened', err)
-        }
-      
-        console.log(`server is listening on ${port}`)
-    })
+
     
 });
 
