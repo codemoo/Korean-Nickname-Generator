@@ -17,7 +17,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "netlify-lambda build express",
+    "build": "netlify-lambda build express && node -p 'process.env'",
     "start": "nodemon server-local.js"
   },
   "author": "codemoo",
