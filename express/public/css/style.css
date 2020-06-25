@@ -1,0 +1,54 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,800);
+@import url('https://fonts.googleapis.com/css2?family=Sunflower:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Sunflower:wght@300;500;700&display=swap');
+
+*, *:before, *:after{
+  box-sizing: border-box;
+  padding: 0; margin: 0;
+  font: 300 1em/1.5 'Noto Sans KR', sans-serif;
+  text-decoration: none;
+  color: #111;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+
+html, body{background: rgb(236, 240, 241);}
+
+  section.container{
+    min-width: 500px;
+    margin: 10% auto;
+    text-align: center;
+  }
+    a.insta:hover{border-bottom: 1px solid #111;} 
+    h1{font-size: 2em; padding: 20px 0;font-family: 'Sunflower', sans-serif;}
+    p{
+      font-size: .75em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 20px 0;
+      font: 300 1em/1.5 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    button:hover{cursor: pointer}
+    button {
+      background: transparent; outline: none;
+      position: relative;
+      border: 2px solid #111;
+      padding: 15px 50px;
+      overflow: hidden;
+      
+    }
+
+    /*button div (button text before hover)*/
+    /* button:hover div{opacity: 0; transform: translate(100%,0)} */
+    button div{
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-weight: 800;
+      font-size: .8em;
+      transition: all .3s ease-in-out;
+    }
+

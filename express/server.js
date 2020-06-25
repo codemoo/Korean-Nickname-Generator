@@ -6,22 +6,24 @@ const bodyParser = require('body-parser');
 
 var words = [];
 
-const csv = require('csv-parser');
-const fs = require('fs');
+app.set('view engine','ejs');
+app.set('views','./views');
+
+app.use(express.static(__dirname + '/public'));
 
 const router = express.Router();
-app.get('/', (request, response) => {
+app.get('/', (req, res) => {
     
-    if (request.query.count === undefined || request.query.count === '') {
+    if (req.query.count === undefined || req.query.count === '') {
         var loop = 1
     } else {
-        var loop = parseInt(request.query.count)
+        var loop = parseInt(req.query.count)
     }
 
-    if (request.query.seed === undefined || request.query.seed === '') {
+    if (req.query.seed === undefined || req.query.seed === '') {
         var seed = 'hwanmoo.yong';
     } else {
-        var seed = request.query.seed;
+        var seed = req.query.seed;
         seedrandom(seed, { global: true }); 
     }
 
@@ -32,13 +34,15 @@ app.get('/', (request, response) => {
         results.push(r);
     }
     
-    if (request.query.format === 'json') {
-        response.json({
+    if (req.query.format === 'json') {
+        res.json({
             'words':results,
             'seed':seed
         })
+    } else if (req.query.format === 'text') {
+        res.send(results.join(", "))
     } else {
-        response.send(results.join(", "))
+        res.render('view', {data:results.join(", ")});
     }
     
 })
@@ -49,24 +53,23 @@ app.use('/.netlify/functions/server', router);  // path must route to lambda
 module.exports = app;
 module.exports.handler = serverless(app);
 
-// fs.createReadStream('./misc/words.csv')
-// .pipe(csv())
-// .on('data', (row) => {
-//     words.push(row);
-// })
-// .on('end', () => {
-//     console.log('CSV file successfully processed');
-//     console.log(words)    
-// });
-
 // 닉네임 생성 관련
 var seedrandom = require('seedrandom');
 
 seedrandom('hello.', { global: true }); 
 
 function genWord(words) {
-    var adj = words[Math.floor(Math.random() * words.length)]['adj'];
-    var noun = words[Math.floor(Math.random() * words.length)]['noun'];
+    while (true) {
+        var adj = words[Math.floor(Math.random() * words.length)];
+        var noun = words[Math.floor(Math.random() * words.length)];
+
+        if (adj !== undefined && noun !== undefined) {
+            adj = adj['adj']
+            noun = noun['noun']
+            break;
+        }
+    }
+    
 
     return adj + ' ' + noun;
 }
@@ -75,47 +78,15 @@ const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 const doc = new GoogleSpreadsheet("1DYpvEiaEh2DLEBKifTRptInkw0cCoWALDxAFUO60kHc");
 
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const csvWriter = createCsvWriter({
-    path: './misc/words.csv',
-    header: [
-      {id: 'id', title: 'id'},
-      {id: 'adj', title: 'adj'},
-      {id: 'noun', title: 'noun'},
-    ]
-});
-
 var minutes = 5, the_interval = minutes * 1 * 1000;
 setInterval(function() {
 
     // just wrap your code in an async function that gets called immediately
-    (async function main() {
-        await doc.useServiceAccountAuth(require('../misc/key.json'));
-        await doc.loadInfo(); // loads document properties and worksheets
-        // console.log(doc.title);
-    
-        const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
-        // console.log(sheet.title);
-        // console.log(sheet.rowCount);
-    
-        // read rows
-        const rows = await sheet.getRows(); // can pass in { limit, offset }
-    
-        words = [];
-        rows.forEach(row => {
-            let _data = {
-                'id':row._rawData[0],
-                'adj':row._rawData[1],
-                'noun':row._rawData[2],
-            }    
-            words.push(_data);
-        });
-    
-    })();
+    (main());
 
 }, the_interval);
 
-(async function main() {
+async function main() {
     await doc.useServiceAccountAuth(require('../misc/key.json'));
     await doc.loadInfo(); // loads document properties and worksheets
     // console.log(doc.title);
@@ -137,4 +108,6 @@ setInterval(function() {
         words.push(_data);
     });
 
-})();
+}
+
+(main());

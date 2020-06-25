@@ -7,17 +7,17 @@
     "body-parser": "^1.19.0",
     "csv-parser": "^2.3.3",
     "csv-writer": "^1.6.0",
+    "ejs": "^3.1.3",
     "encoding": "^0.1.12",
     "express": "^4.17.1",
     "google-spreadsheet": "^3.0.11",
-    "netlify-lambda": "^1.6.3",
     "nodemon": "^1.19.2",
     "seedrandom": "^3.0.5",
     "serverless-http": "^2.5.0"
   },
   "devDependencies": {},
   "scripts": {
-    "build": "netlify-lambda build express && node -p 'process.env'",
+    "build": "npm install",
     "start": "nodemon server-local.js"
   },
   "author": "codemoo",
