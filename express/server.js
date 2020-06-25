@@ -33,6 +33,13 @@ app.get('/', (req, res) => {
         var r = genWord(words);
         results.push(r);
     }
+
+    let code_results = [];
+
+    for (let i=0;i<2;i++) {
+        var r = genWord(words);
+        code_results.push(r);
+    }
     
     if (req.query.format === 'json') {
         res.json({
@@ -42,7 +49,7 @@ app.get('/', (req, res) => {
     } else if (req.query.format === 'text') {
         res.send(results.join(", "))
     } else {
-        res.render('view', {data:results.join(", ")});
+        res.render('view', {data:results.join(", "), code_data:code_results.join('","')});
     }
     
 })

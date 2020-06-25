@@ -41,5 +41,40 @@
           <a class="insta" href="https://www.instagram.com/hwanmoo.yong">hwanmoo.yong</a>
         </p>
     </section>
+    <section class="api">
+        <div class="desc">API Description</div>
+        <div class="host">GET https://nickname.hwanmoo.kr/?format=json&count=2</div>
+        <table>
+            <thead>
+                <tr>
+                    <th width="25%">Parameter</th>
+                    <th width="25%">Required</th>
+                    <th width="50%">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>format</td>
+                    <td>Yes</td>
+                    <td>json, text</td>
+                </tr>
+                <tr>
+                    <td>count</td>
+                    <td>No</td>
+                    <td>1, 2, 3</td>
+                </tr>
+                <tr>
+                    <td>seed</td>
+                    <td>No</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="desc">Example of response</div>
+        <div class="host" style="white-space: pre-wrap;">{
+    "words":["<%= code_data %>"],
+    "seed":"hwanmoo.yong"
+}</div>
+    </section>
 </body>
 </html>
