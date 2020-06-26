@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
         if (req.query.count === undefined || req.query.count === '' || parseInt(req.query.count) === undefined ||  isNaN(req.query.count)) {
             var loop = 1
         } else {
-            var loop = parseInt(req.query.count)
+            var loop = Math.min(parseInt(req.query.count), 50)
         }
     
         if (req.query.seed === undefined || req.query.seed === '') {
@@ -30,26 +30,7 @@ app.get('/', (req, res) => {
         let results = [];
     
         for (let i=0;i<loop;i++) {
-            if (req.query.max_length === undefined || req.query.max_length === '') {
-                var r = genWord(words);
-            } else {
-                var target_max_length = parseInt(req.query.max_length);
-                
-                if (target_max_length === undefined || target_max_length < 6 || isNaN(target_max_length)) {
-                    target_max_length = 6;
-                }
-                
-                while (true) {
-                    var r = genWord(words);
-                    if (r.length <= parseInt(target_max_length)) {
-                        break;
-                    }
-                }
-            }
-    
-            if (req.query.whitespace !== undefined && req.query.whitespace !== '') {
-                r = r.replace(/ /gi, req.query.whitespace[0]); 
-            }
+            var r = queryParser(req, words);
     
             results.push(r);
         }
@@ -57,26 +38,7 @@ app.get('/', (req, res) => {
         let code_results = [];
     
         for (let i=0;i<2;i++) {
-            if (req.query.max_length === undefined || req.query.max_length === '') {
-                var r = genWord(words);
-            } else {
-                var target_max_length = parseInt(req.query.max_length);
-                
-                if (target_max_length === undefined || target_max_length < 6 || isNaN(target_max_length)) {
-                    target_max_length = 6;
-                }
-                
-                while (true) {
-                    var r = genWord(words);
-                    if (r.length <= parseInt(target_max_length)) {
-                        break;
-                    }
-                }
-            }
-    
-            if (req.query.whitespace !== undefined && req.query.whitespace !== '') {
-                r = r.replace(/ /gi, req.query.whitespace[0]); 
-            }
+            var r = queryParser(req, words);
 
             code_results.push(r);
         }
@@ -119,7 +81,32 @@ module.exports.handler = serverless(app);
 // 닉네임 생성 관련
 var seedrandom = require('seedrandom');
 
-seedrandom('hello.', { global: true }); 
+seedrandom('hwanmoo.yong', { global: true }); 
+
+function queryParser(req, words) {
+    if (req.query.max_length === undefined || req.query.max_length === '') {
+        var r = genWord(words);
+    } else {
+        var target_max_length = parseInt(req.query.max_length);
+        
+        if (target_max_length === undefined || target_max_length < 6 || isNaN(target_max_length)) {
+            target_max_length = 6;
+        }
+        
+        while (true) {
+            var r = genWord(words);
+            if (r.length <= parseInt(target_max_length)) {
+                break;
+            }
+        }
+    }
+
+    if (req.query.whitespace !== undefined && req.query.whitespace !== '') {
+        r = r.replace(/ /gi, req.query.whitespace[0]); 
+    }
+
+    return r
+}
 
 function genWord(words) {
     while (true) {
