@@ -13,44 +13,100 @@ app.use(express.static(__dirname + '/public'));
 
 const router = express.Router();
 app.get('/', (req, res) => {
+    try {
+        if (req.query.count === undefined || req.query.count === '' || parseInt(req.query.count) === undefined ||  isNaN(req.query.count)) {
+            var loop = 1
+        } else {
+            var loop = parseInt(req.query.count)
+        }
     
-    if (req.query.count === undefined || req.query.count === '') {
-        var loop = 1
-    } else {
-        var loop = parseInt(req.query.count)
+        if (req.query.seed === undefined || req.query.seed === '') {
+            var seed = 'hwanmoo.yong';
+        } else {
+            var seed = req.query.seed;
+            seedrandom(seed, { global: true }); 
+        }
+    
+        let results = [];
+    
+        for (let i=0;i<loop;i++) {
+            if (req.query.max_length === undefined || req.query.max_length === '') {
+                var r = genWord(words);
+            } else {
+                var target_max_length = parseInt(req.query.max_length);
+                
+                if (target_max_length === undefined || target_max_length < 6 || isNaN(target_max_length)) {
+                    target_max_length = 6;
+                }
+                
+                while (true) {
+                    var r = genWord(words);
+                    if (r.length <= parseInt(target_max_length)) {
+                        break;
+                    }
+                }
+            }
+    
+            if (req.query.whitespace !== undefined && req.query.whitespace !== '') {
+                r = r.replace(/ /gi, req.query.whitespace[0]); 
+            }
+    
+            results.push(r);
+        }
+    
+        let code_results = [];
+    
+        for (let i=0;i<2;i++) {
+            if (req.query.max_length === undefined || req.query.max_length === '') {
+                var r = genWord(words);
+            } else {
+                var target_max_length = parseInt(req.query.max_length);
+                
+                if (target_max_length === undefined || target_max_length < 6 || isNaN(target_max_length)) {
+                    target_max_length = 6;
+                }
+                
+                while (true) {
+                    var r = genWord(words);
+                    if (r.length <= parseInt(target_max_length)) {
+                        break;
+                    }
+                }
+            }
+    
+            if (req.query.whitespace !== undefined && req.query.whitespace !== '') {
+                r = r.replace(/ /gi, req.query.whitespace[0]); 
+            }
+
+            code_results.push(r);
+        }
+        
+        if (req.query.format === 'json') {
+            res.json({
+                'words':results,
+                'seed':seed
+            })
+        } else if (req.query.format === 'text') {
+            res.send(results.join(", "))
+        } else {
+            res.render('view', {data:results.join(", "), code_data:code_results.join('","')});
+        }
     }
+    catch (exception) {
+        console.log(exception);
 
-    if (req.query.seed === undefined || req.query.seed === '') {
-        var seed = 'hwanmoo.yong';
-    } else {
-        var seed = req.query.seed;
-        seedrandom(seed, { global: true }); 
-    }
-
-    let results = [];
-
-    for (let i=0;i<loop;i++) {
-        var r = genWord(words);
-        results.push(r);
-    }
-
-    let code_results = [];
-
-    for (let i=0;i<2;i++) {
-        var r = genWord(words);
-        code_results.push(r);
+        if (req.query.format === 'json') {
+            res.json({
+                'code':1,
+                'msg':'Wrong parameter.'
+            })
+        } else if (req.query.format === 'text') {
+            res.send('Wrong parameter.')
+        } else {
+            res.render('view', {data:'잘못된 파라미터', code_data:''});
+        }
     }
     
-    if (req.query.format === 'json') {
-        res.json({
-            'words':results,
-            'seed':seed
-        })
-    } else if (req.query.format === 'text') {
-        res.send(results.join(", "))
-    } else {
-        res.render('view', {data:results.join(", "), code_data:code_results.join('","')});
-    }
     
 })
 
