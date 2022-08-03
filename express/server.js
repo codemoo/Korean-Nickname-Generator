@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
         if (req.query.count === undefined || req.query.count === '' || parseInt(req.query.count) === undefined ||  isNaN(req.query.count)) {
             var loop = 1
         } else {
-            var loop = Math.min(parseInt(req.query.count), 50)
+            var loop = Math.min(parseInt(req.query.count), 1000)
         }
     
         if (req.query.seed === undefined || req.query.seed === '') {
